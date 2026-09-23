@@ -13,3 +13,8 @@ def load_data(file_path):
             "last_id":0
                          }
         return expenses_dict
+    
+    
+def save_data(file_path, data):
+    with file_path.open("w") as file: 
+        json.dump(data,file)
