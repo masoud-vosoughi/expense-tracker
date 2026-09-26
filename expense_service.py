@@ -42,7 +42,7 @@ def update_expense(file_path, expense_id, description=None, amount=None):
         raise ValueError("No fields provided for update")
     
     old_expense = Expense.from_dict(target_expense)
-    if description  is not None:
+    if description is not None:
         new_description = description
     else:
         new_description = old_expense.description
@@ -63,3 +63,22 @@ def update_expense(file_path, expense_id, description=None, amount=None):
     save_data(file_path,data)
     
     return updated_expense
+
+
+def delete_expense(file_path, expense_id):
+    data = load_data(file_path)
+    expense_index = None
+    
+    for index, expense in enumerate(data["expenses"]):
+        if expense_id == expense["id"]:
+            expense_index = index
+            break
+        
+    if expense_index is None:
+        raise ValueError("Expense not found")
+    
+    deleted_expense_data = data["expenses"].pop(expense_index)
+    
+    save_data(file_path, data)
+    
+    return Expense.from_dict(deleted_expense_data)
