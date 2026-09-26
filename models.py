@@ -1,3 +1,7 @@
+from datetime import datetime
+from decimal import Decimal
+
+
 class Expense:
     def __init__(self,id,description,amount,date):
         
@@ -20,3 +24,20 @@ class Expense:
             "amount" : str(self.amount),
             "date" : self.date.isoformat()
         }
+    
+    @classmethod
+    def from_dict(cls, data):
+        id = data["id"]
+        description = data["description"]
+        amount = data["amount"]
+        date = data["date"]
+        
+        amount = Decimal(amount)
+        date = datetime.fromisoformat(date)
+        
+        return cls(
+            id,
+            description,
+            amount,
+            date
+        )
