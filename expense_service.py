@@ -1,4 +1,5 @@
 from datetime import datetime
+from decimal import Decimal
 
 from models import Expense
 from storage import load_data, save_data
@@ -82,3 +83,43 @@ def delete_expense(file_path, expense_id):
     save_data(file_path, data)
     
     return Expense.from_dict(deleted_expense_data)
+
+
+def list_expenses(file_path):
+    data = load_data(file_path)
+    expenses_list = []
+    
+    
+    for expense in data["expenses"]:
+        expense_object = Expense.from_dict(expense)
+        expenses_list.append(expense_object)
+        
+    
+    return expenses_list
+    
+    
+def get_total_expense(file_path):
+    total = Decimal("0")
+    data = load_data(file_path)
+    for expense in data["expenses"]:
+        amount = Decimal(expense["amount"])
+        total += amount
+    return total
+
+def get_monthly_total(file_path, month):
+    if month not in range(1,13):
+        raise ValueError(
+            "Invalid month. Month must be an integer between 1 and 12"
+            )
+    
+    total = Decimal("0")
+    data = load_data(file_path)
+    current_year = datetime.now().year
+        
+    for expense in data["expenses"]:
+        expense_date = datetime.fromisoformat(expense["date"]) 
+        if month == expense_date.month and expense_date.year == current_year:
+            amount = Decimal(expense["amount"])
+            total += amount
+    return total
+        
