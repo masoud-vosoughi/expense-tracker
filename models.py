@@ -12,3 +12,11 @@ class Expense:
         self.amount = amount
         self.date = date
             
+        
+    def to_dict(self):
+        return {
+            "id" : self.id,
+            "description" : self.description,
+            "amount" : str(self.amount),
+            "date" : self.date.isoformat()
+        }
