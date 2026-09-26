@@ -5,7 +5,7 @@ from decimal import Decimal
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
-from expense_service import add_expense
+from expense_service import add_expense, update_expense
 from storage import load_data
 
 
@@ -35,3 +35,24 @@ class TestExpenseService(unittest.TestCase):
             self.assertEqual(saved_expense["id"], 1)
             self.assertEqual(saved_expense["description"], "Lunch")
             self.assertEqual(saved_expense["amount"], "20.50")
+            
+    def test_update_expense(self):
+        with TemporaryDirectory() as temp_dir:
+            file_path = Path(temp_dir) / "expenses.json"
+
+            original = add_expense(
+                file_path=file_path,
+                description="Lunch",
+                amount=Decimal("20.50")
+            )
+
+            updated = update_expense(
+                file_path=file_path,
+                expense_id=original.id,
+                description="Dinner"
+            )
+
+            self.assertEqual(updated.id, original.id)
+            self.assertEqual(updated.description, "Dinner")
+            self.assertEqual(updated.amount, Decimal("20.50"))
+            self.assertEqual(updated.date, original.date)
