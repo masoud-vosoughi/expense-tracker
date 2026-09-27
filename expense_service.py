@@ -10,7 +10,7 @@ def add_expense(file_path, description, amount):
     data = load_data(file_path)
     
     new_id = data["last_id"] + 1
-    current_date = datetime.now()
+    current_date = datetime.now().astimezone()
     
     expense = Expense(
         id=new_id,
@@ -114,7 +114,7 @@ def get_monthly_total(file_path, month):
     
     total = Decimal(0)
     data = load_data(file_path)
-    current_year = datetime.now().year
+    current_year = datetime.now().astimezone().year
         
     for expense in data["expenses"]:
         expense_date = datetime.fromisoformat(expense["date"]) 

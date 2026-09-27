@@ -143,7 +143,7 @@ class TestExpenseService(unittest.TestCase):
                 amount=Decimal("10.00")
             )
 
-            current_month = datetime.now().month
+            current_month = datetime.now().astimezone().month
 
             total = get_monthly_total(
                 file_path=file_path,
