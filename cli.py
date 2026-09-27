@@ -2,7 +2,14 @@ import argparse
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
 
-from expense_service import add_expense, list_expenses, delete_expense, update_expense
+from expense_service import (
+    add_expense,
+    delete_expense,
+    get_monthly_total,
+    get_total_expense,
+    list_expenses,
+    update_expense,
+)
 
 DATA_FILE = Path("expenses.json")
 
@@ -25,6 +32,13 @@ add_parser.add_argument(
 )
 
 list_parser = subparsers.add_parser("list")
+
+summary_parser = subparsers.add_parser("summary")
+
+summary_parser.add_argument(
+    "--month",
+    required=False
+)
 
 update_parser = subparsers.add_parser("update")
 
@@ -103,7 +117,7 @@ elif args.command == "delete":
         try:
             delete_expense(
                 DATA_FILE,
-                expense_id= expense_id
+                expense_id=expense_id
             )
             
             print("Expense deleted successfully")
@@ -140,4 +154,21 @@ elif args.command == "update":
                 
             except ValueError as error:
                 print(f"Error: {error}")
-                
+    
+    
+elif args.command == "summary":
+        if args.month is None:
+            total = get_total_expense(DATA_FILE)
+            print(f"Total expenses: {total}")
+            
+        else:
+            try:
+                month = int(args.month)
+            except ValueError:
+                print("Error: month must be an integer")
+            else:
+                try:
+                    total = get_monthly_total(DATA_FILE, month)
+                    print(f"Total expenses for month {month}: {total}")
+                except ValueError as error:
+                    print(f"Error: {error}")
