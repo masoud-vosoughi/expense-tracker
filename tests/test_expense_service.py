@@ -18,15 +18,12 @@ from storage import load_data
 
 
 class TestExpenseService(unittest.TestCase):
-
     def test_add_expense(self):
         with TemporaryDirectory() as temp_dir:
             file_path = Path(temp_dir) / "expenses.json"
 
             expense = add_expense(
-                file_path=file_path,
-                description="Lunch",
-                amount=Decimal("20.50")
+                file_path=file_path, description="Lunch", amount=Decimal("20.50")
             )
 
             self.assertEqual(expense.id, 1)
@@ -49,15 +46,11 @@ class TestExpenseService(unittest.TestCase):
             file_path = Path(temp_dir) / "expenses.json"
 
             original = add_expense(
-                file_path=file_path,
-                description="Lunch",
-                amount=Decimal("20.50")
+                file_path=file_path, description="Lunch", amount=Decimal("20.50")
             )
 
             updated = update_expense(
-                file_path=file_path,
-                expense_id=original.id,
-                description="Dinner"
+                file_path=file_path, expense_id=original.id, description="Dinner"
             )
 
             self.assertEqual(updated.id, original.id)
@@ -70,20 +63,15 @@ class TestExpenseService(unittest.TestCase):
             file_path = Path(temp_dir) / "expenses.json"
 
             first_expense = add_expense(
-                file_path=file_path,
-                description="Lunch",
-                amount=Decimal("20.50")
+                file_path=file_path, description="Lunch", amount=Decimal("20.50")
             )
 
             second_expense = add_expense(
-                file_path=file_path,
-                description="Taxi",
-                amount=Decimal("10.00")
+                file_path=file_path, description="Taxi", amount=Decimal("10.00")
             )
 
             deleted_expense = delete_expense(
-                file_path=file_path,
-                expense_id=first_expense.id
+                file_path=file_path, expense_id=first_expense.id
             )
 
             self.assertEqual(deleted_expense.id, first_expense.id)
@@ -92,10 +80,7 @@ class TestExpenseService(unittest.TestCase):
             data = load_data(file_path)
 
             self.assertEqual(len(data["expenses"]), 1)
-            self.assertEqual(
-                data["expenses"][0]["id"],
-                second_expense.id
-            )
+            self.assertEqual(data["expenses"][0]["id"], second_expense.id)
 
             self.assertEqual(data["last_id"], 2)
 
@@ -104,15 +89,11 @@ class TestExpenseService(unittest.TestCase):
             file_path = Path(temp_dir) / "expenses.json"
 
             add_expense(
-                file_path=file_path,
-                description="Lunch",
-                amount=Decimal("20.50")
+                file_path=file_path, description="Lunch", amount=Decimal("20.50")
             )
 
             add_expense(
-                file_path=file_path,
-                description="Taxi",
-                amount=Decimal("10.00")
+                file_path=file_path, description="Taxi", amount=Decimal("10.00")
             )
 
             total = get_total_expense(file_path)
@@ -132,23 +113,16 @@ class TestExpenseService(unittest.TestCase):
             file_path = Path(temp_dir) / "expenses.json"
 
             add_expense(
-                file_path=file_path,
-                description="Lunch",
-                amount=Decimal("20.50")
+                file_path=file_path, description="Lunch", amount=Decimal("20.50")
             )
 
             add_expense(
-                file_path=file_path,
-                description="Taxi",
-                amount=Decimal("10.00")
+                file_path=file_path, description="Taxi", amount=Decimal("10.00")
             )
 
             current_month = datetime.now().astimezone().month
 
-            total = get_monthly_total(
-                file_path=file_path,
-                month=current_month
-            )
+            total = get_monthly_total(file_path=file_path, month=current_month)
 
             self.assertEqual(total, Decimal("30.50"))
 
@@ -157,10 +131,7 @@ class TestExpenseService(unittest.TestCase):
             file_path = Path(temp_dir) / "expenses.json"
 
             with self.assertRaises(ValueError):
-                get_monthly_total(
-                    file_path=file_path,
-                    month=13
-                )
+                get_monthly_total(file_path=file_path, month=13)
 
 
 if __name__ == "__main__":
