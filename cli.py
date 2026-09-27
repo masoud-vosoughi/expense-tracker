@@ -2,7 +2,7 @@ import argparse
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
 
-from expense_service import add_expense, list_expenses, delete_expense
+from expense_service import add_expense, list_expenses, delete_expense, update_expense
 
 DATA_FILE = Path("expenses.json")
 
@@ -26,14 +26,29 @@ add_parser.add_argument(
 
 list_parser = subparsers.add_parser("list")
 
+update_parser = subparsers.add_parser("update")
+
+update_parser.add_argument(
+    "--id",
+    required=True
+)
+
+update_parser.add_argument(
+    "--description",
+    required=False
+)
+
+update_parser.add_argument(
+    "--amount",
+    required=False
+)
+
 delete_parser = subparsers.add_parser("delete")
 
 delete_parser.add_argument(
     "--id",
     required=True
 )
-
-
 
 
 args = parser.parse_args()
@@ -95,3 +110,34 @@ elif args.command == "delete":
             
         except ValueError as error:
             print(f"Error: {error}")
+
+
+elif args.command == "update":
+    if args.description is None and args.amount is None:
+        print("Error: provide at least a description or an amount")
+    else:
+        try:
+            expense_id = int(args.id)
+        except ValueError:
+            print("Error: ID must be an integer")
+        else:
+            try:
+                if args.amount is not None:
+                    amount = Decimal(args.amount)
+                else:
+                    amount = None
+                
+                update_expense(
+                    file_path=DATA_FILE,
+                    expense_id=expense_id,
+                    description=args.description,
+                    amount=amount
+                    )
+                print("Expense updated successfully")
+                    
+            except InvalidOperation:
+                print("Error: amount must be a valid number")
+                
+            except ValueError as error:
+                print(f"Error: {error}")
+                
