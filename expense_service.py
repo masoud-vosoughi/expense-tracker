@@ -99,7 +99,7 @@ def list_expenses(file_path):
     
     
 def get_total_expense(file_path):
-    total = Decimal("0")
+    total = Decimal(0)
     data = load_data(file_path)
     for expense in data["expenses"]:
         amount = Decimal(expense["amount"])
@@ -112,7 +112,7 @@ def get_monthly_total(file_path, month):
             "Invalid month. Month must be an integer between 1 and 12"
             )
     
-    total = Decimal("0")
+    total = Decimal(0)
     data = load_data(file_path)
     current_year = datetime.now().year
         

@@ -125,7 +125,7 @@ class TestExpenseService(unittest.TestCase):
 
             total = get_total_expense(file_path)
 
-            self.assertEqual(total, Decimal("0"))
+            self.assertEqual(total, Decimal(0))
 
     def test_get_monthly_total(self):
         with TemporaryDirectory() as temp_dir:

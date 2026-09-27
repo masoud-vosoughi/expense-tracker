@@ -43,7 +43,7 @@ class TestExpense(unittest.TestCase):
             Expense(
                 id=3,
                 description="Unknown price",
-                amount=Decimal("-10"),
+                amount=Decimal(-10),
                 date=datetime(2026, 9, 22, 12, 0)
             )
             
@@ -51,13 +51,13 @@ class TestExpense(unittest.TestCase):
         expense = Expense(
             id=2,
             description="Unknown price",
-            amount=Decimal("0"),
+            amount=Decimal(0),
             date=datetime(2026, 9, 22, 12, 0)
         )
         
         self.assertEqual(expense.id, 2)
         self.assertEqual(expense.description,"Unknown price")
-        self.assertEqual(expense.amount,Decimal("0"))
+        self.assertEqual(expense.amount,Decimal(0))
         self.assertEqual(expense.date,datetime(2026, 9, 22, 12, 0))
         
 
