@@ -2,7 +2,7 @@ import argparse
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
 
-from expense_service import add_expense, list_expenses
+from expense_service import add_expense, list_expenses, delete_expense
 
 DATA_FILE = Path("expenses.json")
 
@@ -25,6 +25,15 @@ add_parser.add_argument(
 )
 
 list_parser = subparsers.add_parser("list")
+
+delete_parser = subparsers.add_parser("delete")
+
+delete_parser.add_argument(
+    "--id",
+    required=True
+)
+
+
 
 
 args = parser.parse_args()
@@ -68,3 +77,21 @@ elif args.command == "list":
                 f"{expense.description:<20} "
                 f"{expense.amount:>10}"
                 )
+            
+            
+elif args.command == "delete":
+    try:
+        expense_id = int(args.id)
+    except ValueError:
+        print("Error: ID must be an integer")
+    else:
+        try:
+            delete_expense(
+                DATA_FILE,
+                expense_id= expense_id
+            )
+            
+            print("Expense deleted successfully")
+            
+        except ValueError as error:
+            print(f"Error: {error}")
