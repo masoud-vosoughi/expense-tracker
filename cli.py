@@ -2,7 +2,7 @@ import argparse
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
 
-from expense_service import add_expense
+from expense_service import add_expense, list_expenses
 
 DATA_FILE = Path("expenses.json")
 
@@ -24,6 +24,9 @@ add_parser.add_argument(
     required=True
 )
 
+list_parser = subparsers.add_parser("list")
+
+
 args = parser.parse_args()
 
 if args.command == "add":
@@ -44,3 +47,24 @@ if args.command == "add":
     except ValueError as error:
         print(f"Error: {error}")
     
+
+elif args.command == "list":
+    expenses = list_expenses(DATA_FILE)
+    if not expenses:
+        print("No expenses found.")
+        
+    else:
+        print(
+            f"{'ID':<5} "
+            f"{'Date':<12} "
+            f"{'Description':<20} "
+            f"{'Amount':>10}"
+        )
+        
+        for expense in expenses:
+            print(
+                f"{expense.id:<5} "
+                f"{expense.date.strftime('%Y-%m-%d'):<12} "
+                f"{expense.description:<20} "
+                f"{expense.amount:>10}"
+                )
